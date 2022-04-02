@@ -11,7 +11,7 @@ For scraping script use simple gnu utils like sed, awk, paste, cut.
 
 ## Requirements
 
-* [peerflix] (https://github.com/mafintosh/peerflix)
+* [peerflix](https://github.com/mafintosh/peerflix)
 
 ## Installation
 
