@@ -1,0 +1,43 @@
+#!/usr/bin/env sh
+
+# quary piratebay  
+query=$(dmenu -p "Search Torrent: " <&-)
+curl -s https://thepiratebay.party/search/$query/1/99/0 > tmp.html
+
+# get titles
+grep -o '<a href="https://thepiratebay.party/torrent/.*</a>' tmp.html |
+  sed 's/<[^>]*>//g' > titles.bw
+
+# get movie size and clean them
+grep -o '<td align=.*&nbsp;.*</td>' tmp.html | sed 's/&nbsp;//g'| sed -e 's/<[^>]*>//g' > size.bw 
+awk '{print NR " - ["$0"]"}' size.bw > tmp && mv tmp size.bw
+
+# get links
+grep -Eo "magnet:\?xt=urn:btih:[a-zA-Z0-9]*" tmp.html | sed -s '' > links.bw
+
+# launch dmenu and get magnet link
+menu="dmenu -i -l 25"
+
+LINE=$(paste -d\   size.bw  titles.bw |
+  $menu |
+  cut -d\- -f1 |
+  awk '{$1=$1; print}')
+
+url=$(head -n $LINE links.bw | tail -n +$LINE)
+
+# ask is you mant to stream or download the movie
+if [ -z $1 ]; then
+  stream=$(dmenu -p "stream or download: " <&-)
+else
+  stream=$2
+fi
+
+if [[ "$stream" == 'stream' ]]; then
+        # Simple notification
+        notify-send "🎥 Enjoy Watching ☺️ " -i "NONE"
+        peerflix -k "$url" 
+else
+        # Simple notification
+        notify-send "🎥 Downloading torrent to current dir: $PWD " -i "NONE"
+        peerflix "$url"
+fi
