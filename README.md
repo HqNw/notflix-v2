@@ -15,11 +15,11 @@ For scraping script use simple gnu utils like sed, awk, paste, cut.
 
 ## Installation
 
-### cURL
+### CURL
 cURL **notflix** to your **$PATH** and give execute permissions.
 
 ```sh
-$ curl -sL "https://raw.githubusercontent.com/HqNw/notflix/master/notflix" > $HOME/.local/bin/notflix
+$ curl -sL "https://raw.githubusercontent.com/HqNw/notflix-v2/master/notflix" > $HOME/.local/bin/notflix
 $ chmod +x $HOME/.local/bin/notflix
 ```
 - To update, just do `curl` again, no need to `chmod` anymore.
